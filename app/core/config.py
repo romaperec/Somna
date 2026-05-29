@@ -45,7 +45,7 @@ class Settings(BaseSettings):
 
     app: AppSettings = AppSettings()
     logger: LoggingSettings = LoggingSettings()
-    database: DatabaseSettings = DatabaseSettings()
+    database: DatabaseSettings
 
 
 settings = Settings()

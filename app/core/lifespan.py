@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
 
-from core.logging import setup_logging
 from fastapi import FastAPI
 from loguru import logger
+
+from app.core.logging import setup_logging
 
 
 @asynccontextmanager

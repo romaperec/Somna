@@ -1,15 +1,16 @@
-from core.config import settings
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, declared_attr
-from utils.case_converter import camel_case_to_snake_case
+
+from app.core.config import settings
+from app.utils.case_converter import camel_case_to_snake_case
 
 
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True
 
     metadata = MetaData(
-        naming_convention=settings.db.naming_convention,
+        naming_convention=settings.database.naming_convention,
     )
 
     @declared_attr.directive

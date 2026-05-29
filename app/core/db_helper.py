@@ -1,7 +1,6 @@
 from enum import auto
 from typing import AsyncGenerator
 
-from core.config import settings
 from loguru import logger
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -10,6 +9,8 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 from sqlalchemy.testing import eq_clause_element
+
+from app.core.config import settings
 
 
 class DatabaseHelper:

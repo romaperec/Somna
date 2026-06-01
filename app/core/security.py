@@ -10,3 +10,6 @@ class PasswordSecurityService:
 
     def verify(self, password: str, hashed_password: str) -> bool:
         return self._ph.verify(password, hashed_password)
+
+
+password_service = PasswordSecurityService()

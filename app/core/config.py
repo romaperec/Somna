@@ -36,6 +36,13 @@ class DatabaseSettings(BaseModel):
     }
 
 
+class JWTSettings(BaseModel):
+    algorithm: str = "HS256"
+    secret_key: str
+    access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 7
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),

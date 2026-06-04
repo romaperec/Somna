@@ -43,6 +43,13 @@ class JWTSettings(BaseModel):
     refresh_token_expire_days: int = 7
 
 
+class RedisSettings(BaseSettings):
+    host: str = "localhost"
+    port: int = 6379
+    max_connections: int = 10
+    timeout: int = 5
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
@@ -54,6 +61,7 @@ class Settings(BaseSettings):
     logger: LoggingSettings = LoggingSettings()
     database: DatabaseSettings
     jwt: JWTSettings
+    redis: RedisSettings = RedisSettings()
 
 
 settings = Settings()

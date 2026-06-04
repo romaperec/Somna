@@ -53,6 +53,7 @@ class Settings(BaseSettings):
     app: AppSettings = AppSettings()
     logger: LoggingSettings = LoggingSettings()
     database: DatabaseSettings
+    jwt: JWTSettings
 
 
 settings = Settings()

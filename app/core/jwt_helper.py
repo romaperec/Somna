@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -37,14 +38,17 @@ class JWTHelper:
 
     def create_refresh_token(
         self, data: dict, expires_delta: timedelta | None = None
-    ) -> str:
+    ) -> tuple[str, str]:
         to_encode = data.copy()
         expire = datetime.now(timezone.utc) + (
             expires_delta or timedelta(days=self.refresh_token_expire_days)
         )
 
-        to_encode.update({"exp": expire, "type": "refresh"})
-        return jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+        token_jti = str(uuid.uuid4())
+
+        to_encode.update({"exp": expire, "type": "refresh", "jti": token_jti})
+        token_str = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+        return token_str, token_jti
 
     def verify_token(self, token: str, expected_type: str) -> dict[str, Any] | None:
         try:

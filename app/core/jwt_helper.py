@@ -20,6 +20,10 @@ class JWTHelper:
         self.access_token_expire_minutes = access_token_expire_minutes
         self.refresh_token_expire_days = refresh_token_expire_days
 
+    @property
+    def refresh_expire_seconds(self) -> int:
+        return int(timedelta(days=self.refresh_token_expire_days).total_seconds())
+
     def create_access_token(
         self, data: dict, expires_delta: timedelta | None = None
     ) -> str:

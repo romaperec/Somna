@@ -48,6 +48,8 @@ class RedisSettings(BaseSettings):
     port: int = 6379
     max_connections: int = 10
     timeout: int = 5
+    db_cache: int = 0
+    db_auth: int = 1
 
 
 class Settings(BaseSettings):

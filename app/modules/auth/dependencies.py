@@ -1,0 +1,18 @@
+from fastapi import Depends, Request
+from redis.asyncio import Redis
+
+from app.core.jwt_helper import jwt_helper
+from app.modules.auth.repository import AuthRepository
+from app.modules.auth.service import AuthService
+from app.modules.users.dependencies import get_user_service
+from app.modules.users.service import UserService
+
+
+def get_auth_redis_client(request: Request) -> Redis:
+    return request.app.state.auth_redis
+
+def get_auth_repository(redis: Redis = Depends(get_auth_redis_client)) -> AuthRepository:
+    return AuthRepository(redis=redis)
+
+def get_auth_service(repo: AuthRepository = Depends(get_auth_repository), user_service: UserService = Depends(get_user_service)) -> AuthService:
+    return AuthService(repo=repo, jwt_service=jwt_helper, user_service=user_service)

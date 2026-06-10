@@ -32,8 +32,10 @@ class UserService:
 
         return await self.repo.create(user_data)
 
-    async def get_for_authentication(self, email: str) -> User | None:
-        return await self.repo.get_by_email(email)
+    async def get_for_authentication(self, username_or_email: str) -> User | None:
+        if "@" in username_or_email:
+            return await self.repo.get_by_email(username_or_email)
+        return await self.repo.get_by_username(username_or_email)
 
     async def get_profile(self, user_id: uuid.UUID) -> User | None:
         return await self.repo.get_by_id(user_id)

@@ -11,7 +11,7 @@ class PasswordSecurityService:
 
     def verify(self, password: str, hashed_password: str) -> bool:
         try:
-            return self._ph.verify(password, hashed_password)
+            return self._ph.verify(hashed_password, password)
         except VerificationError:
             return False
 

@@ -18,4 +18,9 @@ class AuthService:
         refresh_token, token_jti = self.jwt_service.create_refresh_token({"sub": str(user.id)})
         await self.repo.save_refresh_token(token_jti, str(user.id), ttl=self.jwt_service.refresh_expire_seconds)
 
+    async def _generate_and_save_tokens(self, user_id: str) -> TokenPair:
+        access_token = self.jwt_service.create_access_token({"sub": user_id})
+        refresh_token, token_jti = self.jwt_service.create_refresh_token({"sub": user_id})
+
+        await self.repo.save_refresh_token(token_jti, user_id, ttl=self.jwt_service.refresh_expire_seconds)
         return TokenPair(access_token=access_token, refresh_token=refresh_token)

@@ -12,4 +12,4 @@ class AuthRepository:
         return await self.redis.get(f"refresh_token:{jti}")
 
     async def delete_refresh_token(self, jti: str) -> bool:
-        return bool(self.redis.delete(f"refresh_token:{jti}"))
+        return bool(await self.redis.delete(f"refresh_token:{jti}"))

@@ -57,6 +57,26 @@ class AuthService:
 
         return await self._generate_and_save_tokens(user_id)
 
+    async def logout_user(self, refresh_token: str | None):
+        jti, _ = await self._extract_refresh_payload(refresh_token)
+        await self.repo.delete_refresh_token(jti)
+
+    async def _extract_refresh_payload(self, refresh_token: str | None) -> tuple[str, str]:
+        if refresh_token is None:
+            raise MissingTokenException
+
+        payload = self.jwt_service.verify_token(refresh_token, "refresh")
+        if payload is None:
+            raise InvalidTokenException
+
+        jti = payload.get("jti")
+        user_id = payload.get("sub")
+
+        if not isinstance(user_id, str) or not isinstance(jti, str):
+            raise InvalidTokenException
+
+        return jti, user_id
+
     async def _generate_and_save_tokens(self, user_id: str) -> TokenPair:
         access_token = self.jwt_service.create_access_token({"sub": user_id})
         refresh_token, token_jti = self.jwt_service.create_refresh_token({"sub": user_id})

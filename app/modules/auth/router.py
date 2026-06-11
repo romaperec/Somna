@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Request
 
 from app.core.config import settings
 from app.modules.auth.dependencies import get_auth_service
@@ -32,6 +32,22 @@ async def register(user: UserCreate, response: Response, service: AuthService = 
 @router.post("/login", response_model=TokenPair)
 async def login(user: UserLogin, response: Response, service: AuthService = Depends(get_auth_service)):
     tokens: TokenPair = await service.login_user(user)
+
+    response.set_cookie(
+        key="refresh_token",
+        value=tokens.refresh_token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=settings.jwt.refresh_token_expire_days * 24 * 60 * 60,
+    )
+
+    return tokens
+
+@router.post("/refresh", response_model=TokenPair)
+async def update_tokens(request: Request, response: Response, service: AuthService = Depends(get_auth_service)):
+    refresh_token = request.cookies.get("refresh_token")
+    tokens: TokenPair = await service.update_both_tokens(refresh_token)
 
     response.set_cookie(
         key="refresh_token",

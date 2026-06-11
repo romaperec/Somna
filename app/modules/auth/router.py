@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, Request
+from fastapi import APIRouter, Depends, Request, Response
 
 from app.core.config import settings
 from app.modules.auth.dependencies import get_auth_service
@@ -59,3 +59,16 @@ async def update_tokens(request: Request, response: Response, service: AuthServi
     )
 
     return tokens
+
+@router.post("/logout")
+async def logout(request: Request, response: Response, service: AuthService = Depends(get_auth_service)):
+    refresh_token = request.cookies.get("refresh_token")
+    await service.logout_user(refresh_token)
+
+    response.delete_cookie(
+        key="refresh_token",
+        path="/",
+        httponly=True,
+        samesite="lax",
+        secure=False,
+    )

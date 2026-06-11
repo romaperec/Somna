@@ -1,6 +1,10 @@
 from app.core.jwt_helper import JWTHelper
 from app.core.security import PasswordSecurityService
-from app.modules.auth.exceptions import AuthenticationFailedException
+from app.modules.auth.exceptions import (
+    AuthenticationFailedException,
+    InvalidTokenException,
+    MissingTokenException,
+)
 from app.modules.auth.repository import AuthRepository
 from app.modules.auth.schemas import TokenPair, UserLogin
 from app.modules.users.schemas import UserCreate
@@ -28,6 +32,30 @@ class AuthService:
             raise AuthenticationFailedException
 
         return await self._generate_and_save_tokens(str(user.id))
+
+    async def update_both_tokens(self, refresh_token: str | None):
+        if refresh_token is None:
+            raise MissingTokenException
+
+        payload = self.jwt_service.verify_token(refresh_token, "refresh")
+        if payload is None:
+            raise InvalidTokenException
+
+        jti = payload.get("jti")
+        if not isinstance(jti, str):
+            raise InvalidTokenException
+
+        is_active = await self.repo.get_refresh_token(jti)
+        if is_active is None:
+            raise InvalidTokenException
+
+        await self.repo.delete_refresh_token(jti)
+
+        user_id = payload.get("sub")
+        if not isinstance(user_id, str):
+            raise InvalidTokenException
+
+        return await self._generate_and_save_tokens(user_id)
 
     async def _generate_and_save_tokens(self, user_id: str) -> TokenPair:
         access_token = self.jwt_service.create_access_token({"sub": user_id})

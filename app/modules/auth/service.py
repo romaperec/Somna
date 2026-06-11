@@ -34,27 +34,7 @@ class AuthService:
         return await self._generate_and_save_tokens(str(user.id))
 
     async def update_both_tokens(self, refresh_token: str | None):
-        if refresh_token is None:
-            raise MissingTokenException
-
-        payload = self.jwt_service.verify_token(refresh_token, "refresh")
-        if payload is None:
-            raise InvalidTokenException
-
-        jti = payload.get("jti")
-        if not isinstance(jti, str):
-            raise InvalidTokenException
-
-        is_active = await self.repo.get_refresh_token(jti)
-        if is_active is None:
-            raise InvalidTokenException
-
-        await self.repo.delete_refresh_token(jti)
-
-        user_id = payload.get("sub")
-        if not isinstance(user_id, str):
-            raise InvalidTokenException
-
+        _, user_id = self._extract_refresh_payload(refresh_token)
         return await self._generate_and_save_tokens(user_id)
 
     async def logout_user(self, refresh_token: str | None):

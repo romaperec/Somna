@@ -90,4 +90,4 @@ class UserService:
             raise UserInvalidPasswordException
 
         new_hashed_password = self.password_service.hash(schema.new_password)
-        return await self.repo.update(user, {"hashed_password": new_hashed_password})
+        await self.repo.update(user, {"hashed_password": new_hashed_password})

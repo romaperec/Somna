@@ -17,3 +17,7 @@ def status():
 @router.get("/me", response_model=UserResponse)
 async def get_user_profile(current_user_id: UUID = Depends(get_current_user_id), user_service: UserService = Depends(get_user_service)):
     return await user_service.get_profile(current_user_id)
+
+@router.patch("/me", response_model=UserResponse)
+async def update_user_profile(user_data: UserUpdate, current_user_id: UUID = Depends(get_current_user_id), user_service: UserService = Depends(get_user_service)):
+    return await user_service.update_profile(current_user_id, user_data)

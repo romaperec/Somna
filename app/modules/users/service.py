@@ -64,6 +64,7 @@ class UserService:
             if await self.repo.get_by_username(update_data["username"]):
                 raise UserUsernameExistsException
 
+        await self.repo.delete_cache(user_id)
         return await self.repo.update(user, update_data)
 
     async def delete_account(self, user_id: uuid.UUID) -> bool:

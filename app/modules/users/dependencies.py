@@ -1,4 +1,5 @@
-from fastapi import Depends
+from fastapi import Depends, Request
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db_helper import db_helper
@@ -7,10 +8,14 @@ from app.modules.users.repository import UserRepository
 from app.modules.users.service import UserService
 
 
+def get_cache_redis_client(request: Request) -> Redis:
+    return request.app.state.cache_redis
+
 def get_user_repository(
     session: AsyncSession = Depends(db_helper.session_getter),
+    redis: Redis = Depends(get_cache_redis_client),
 ) -> UserRepository:
-    return UserRepository(session=session)
+    return UserRepository(session=session, redis=redis)
 
 
 def get_user_service(

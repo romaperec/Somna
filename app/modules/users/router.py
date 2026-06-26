@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from app.modules.auth.dependencies import get_current_user_id
 from app.modules.users.dependencies import get_user_service
-from app.modules.users.schemas import UserResponse
+from app.modules.users.schemas import UserResponse, UserUpdate
 from app.modules.users.service import UserService
 
 router = APIRouter(prefix="/users")

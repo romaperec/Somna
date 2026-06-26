@@ -22,3 +22,11 @@ class UserUpdate(BaseModel):
 class UserChangePassword(BaseModel):
     current_password: Annotated[str, Field(max_length=64)]
     new_password: Annotated[str, Field(max_length=64)]
+
+class UserResponse(UserBase):
+    id: UUID
+
+class UserPrivateResponse(UserResponse):
+    hashed_password: str
+
+    model_config = ConfigDict(from_attributes=True)

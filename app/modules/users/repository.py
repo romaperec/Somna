@@ -58,6 +58,9 @@ class UserRepository:
         await self.session.commit()
         return True
 
+    async def delete_cache(self, user_id: uuid.UUID):
+        await self.redis.delete(f"user:{user_id}")
+
     async def update(self, user: User, updated_user_data: dict) -> User:
         for key, value in updated_user_data.items():
             setattr(user, key, value)

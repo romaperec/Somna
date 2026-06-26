@@ -34,7 +34,7 @@ class AuthService:
         return await self._generate_and_save_tokens(str(user.id))
 
     async def update_both_tokens(self, refresh_token: str | None):
-        _, user_id = self._extract_refresh_payload(refresh_token)
+        _, user_id = await self._extract_refresh_payload(refresh_token)
         return await self._generate_and_save_tokens(user_id)
 
     async def logout_user(self, refresh_token: str | None):

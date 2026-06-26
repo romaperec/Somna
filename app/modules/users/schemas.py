@@ -1,6 +1,7 @@
 from typing import Annotated
+from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field, StringConstraints
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints
 
 
 class UserBase(BaseModel):

@@ -51,7 +51,7 @@ class UserService:
         if not user:
             raise UserNotFoundException
 
-        update_data = user_data.model_dump(exclude_unset=True)
+        update_data = user_data.model_dump(exclude_unset=True, exclude_none=True)
 
         if not update_data:
             return user

@@ -65,7 +65,6 @@ class UserRepository:
         for key, value in updated_user_data.items():
             setattr(user, key, value)
 
-        self.session.add(user)
         await self.session.commit()
         await self.session.refresh(user)
         return user

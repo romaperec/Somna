@@ -25,3 +25,7 @@ async def update_user_profile(user_data: UserUpdate, current_user_id: UUID = Dep
 @router.patch("/me/change-password", status_code=200)
 async def change_user_password(passwords: UserChangePassword, current_user_id: UUID = Depends(get_current_user_id), user_service: UserService = Depends(get_user_service)):
     return await user_service.change_password(current_user_id, passwords)
+
+@router.delete("/me")
+async def delete_account(current_user_id: UUID = Depends(get_current_user_id), user_service: UserService = Depends(get_user_service)):
+    return await user_service.delete_account(current_user_id)

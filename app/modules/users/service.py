@@ -73,6 +73,7 @@ class UserService:
         if not user:
             raise UserNotFoundException
 
+        await self.repo.delete_cache(user_id)
         return await self.repo.delete(user)
 
     async def change_password(self, user_id: uuid.UUID, schema: UserChangePassword):

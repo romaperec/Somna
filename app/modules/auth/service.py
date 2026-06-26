@@ -41,6 +41,17 @@ class AuthService:
         jti, _ = await self._extract_refresh_payload(refresh_token)
         await self.repo.delete_refresh_token(jti)
 
+    def get_user_id_by_token(self, access_token: str):
+        payload = self.jwt_service.verify_token(access_token, "access")
+        if payload is None:
+            raise InvalidTokenException
+
+        user_id = payload.get("sub")
+        if not isinstance(user_id, str):
+            raise InvalidTokenException
+
+        return UUID(user_id)
+
     async def _extract_refresh_payload(self, refresh_token: str | None) -> tuple[str, str]:
         if refresh_token is None:
             raise MissingTokenException

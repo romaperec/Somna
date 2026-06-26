@@ -37,7 +37,7 @@ class UserService:
             return await self.repo.get_by_email(username_or_email)
         return await self.repo.get_by_username(username_or_email)
 
-    async def get_profile(self, user_id: uuid.UUID) -> User | None:
+    async def get_profile(self, user_id: uuid.UUID) -> UserPrivateResponse | None:
         return await self.repo.get_by_id(user_id)
 
     async def update_profile(self, user_id: uuid.UUID, user_data: UserUpdate) -> User:

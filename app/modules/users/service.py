@@ -56,7 +56,7 @@ class UserService:
         if not update_data:
             return user
 
-        if "email" in update_data and update_data["email"] != user.username:
+        if "email" in update_data and update_data["email"] != user.email:
             if await self.repo.get_by_email(update_data["email"]):
                 raise UserEmailAlreadyExistsException
 

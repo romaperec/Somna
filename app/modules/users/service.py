@@ -10,7 +10,12 @@ from app.modules.users.exceptions import (
 )
 from app.modules.users.models import User
 from app.modules.users.repository import UserRepository
-from app.modules.users.schemas import UserChangePassword, UserCreate, UserUpdate
+from app.modules.users.schemas import (
+    UserChangePassword,
+    UserCreate,
+    UserPrivateResponse,
+    UserUpdate,
+)
 
 
 class UserService:
@@ -41,7 +46,7 @@ class UserService:
         return await self.repo.get_by_id(user_id)
 
     async def update_profile(self, user_id: uuid.UUID, user_data: UserUpdate) -> User:
-        user = await self.repo.get_by_id(user_id)
+        user = await self.repo.get_orm_by_id(user_id)
 
         if not user:
             raise UserNotFoundException
@@ -62,7 +67,7 @@ class UserService:
         return await self.repo.update(user, update_data)
 
     async def delete_account(self, user_id: uuid.UUID) -> bool:
-        user = await self.repo.get_by_id(user_id)
+        user = await self.repo.get_orm_by_id(user_id)
 
         if not user:
             raise UserNotFoundException
@@ -73,7 +78,7 @@ class UserService:
         if schema.current_password == schema.new_password:
             raise UserPasswordsMatchException
 
-        user = await self.repo.get_by_id(user_id)
+        user = await self.repo.get_orm_by_id(user_id)
 
         if not user:
             raise UserNotFoundException

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from app.core.jwt_helper import JWTHelper
 from app.core.security import PasswordSecurityService
 from app.modules.auth.exceptions import (

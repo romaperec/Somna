@@ -17,6 +17,8 @@ dependencies = [
     "argon2-cffi>=25.1.0",
     "pyjwt>=2.13.0",
     "redis>=8.0.0",
+    "pytest>=9.1.1",
+    "httpx>=0.28.1",
 ]
 
 [tool.ruff]

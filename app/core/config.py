@@ -43,7 +43,7 @@ class JWTSettings(BaseModel):
     refresh_token_expire_days: int = 7
 
 
-class RedisSettings(BaseSettings):
+class RedisSettings(BaseModel):
     host: str = "localhost"
     port: int = 6379
     max_connections: int = 10

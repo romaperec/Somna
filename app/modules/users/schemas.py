@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints
 
 class UserBase(BaseModel):
     username: Annotated[str, Field(max_length=32)]
-    description: Annotated[str, Field(max_length=500)]
+    description: Annotated[str | None, Field(max_length=500)] = None
     email: Annotated[EmailStr, StringConstraints(max_length=254)]
 
 

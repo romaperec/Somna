@@ -27,9 +27,6 @@ class UserService:
         if await self.repo.get_by_email(schema.email):
             raise UserEmailAlreadyExistsException
 
-        if await self.repo.get_by_username(schema.username):
-            raise UserUsernameExistsException
-
         user_data = schema.model_dump()
 
         raw_password = user_data.pop("password")

@@ -11,6 +11,7 @@ from app.modules.users.exceptions import (
 from app.modules.users.models import User
 from app.modules.users.repository import UserRepository
 from app.modules.users.schemas import (
+    UserBase,
     UserChangePassword,
     UserCreate,
     UserPrivateResponse,
@@ -34,6 +35,10 @@ class UserService:
 
         return await self.repo.create(user_data)
 
+    async def register_by_oauth(self, schema: UserBase) -> User:
+        user_data = schema.model_dump()
+        return await self.repo.create(user_data)
+
     async def get_for_authentication(self, email: str) -> User | None:
         return await self.repo.get_by_email(email)
 
@@ -54,10 +59,6 @@ class UserService:
         if "email" in update_data and update_data["email"] != user.email:
             if await self.repo.get_by_email(update_data["email"]):
                 raise UserEmailAlreadyExistsException
-
-        if "username" in update_data and update_data["username"] != user.username:
-            if await self.repo.get_by_username(update_data["username"]):
-                raise UserUsernameExistsException
 
         await self.repo.delete_cache(user_id)
         return await self.repo.update(user, update_data)

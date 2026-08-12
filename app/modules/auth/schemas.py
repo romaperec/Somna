@@ -7,5 +7,5 @@ class TokenPair(BaseModel):
     token_type: str = "Bearer"
 
 class UserLogin(BaseModel):
-    username_or_email: str
+    email: EmailStr
     password: str

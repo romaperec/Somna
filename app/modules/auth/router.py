@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Response
 
 from app.core.config import settings
+from app.core.sso import google_sso
 from app.modules.auth.dependencies import get_auth_service
 from app.modules.auth.schemas import TokenPair, UserLogin
 from app.modules.auth.service import AuthService
@@ -72,3 +73,27 @@ async def logout(request: Request, response: Response, service: AuthService = De
         samesite="lax",
         secure=False,
     )
+
+
+@router.get("/google/login")
+async def login_by_google():
+    async with google_sso as sso:
+        return await sso.get_login_redirect()
+
+
+@router.get("/google/callback")
+async def login_by_google_callback(request: Request, response: Response, service: AuthService = Depends(get_auth_service)):
+    async with google_sso as sso:
+        user_data = await sso.verify_and_process(request)
+    tokens: TokenPair = await service.register_or_login_user_by_oauth(user_data.email, user_data.first_name)
+
+    response.set_cookie(
+        key="refresh_token",
+        value=tokens.refresh_token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=settings.jwt.refresh_token_expire_days * 24 * 60 * 60,
+    )
+
+    return tokens

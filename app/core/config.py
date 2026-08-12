@@ -52,6 +52,12 @@ class RedisSettings(BaseModel):
     db_auth: int = 1
 
 
+class GoogleSSOSettings(BaseModel):
+    client_id: str
+    client_secret: str
+    redirect_uri: str = "http://localhost:8000/auth/google/callback"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
@@ -64,6 +70,7 @@ class Settings(BaseSettings):
     database: DatabaseSettings
     jwt: JWTSettings
     redis: RedisSettings = RedisSettings()
+    google_sso: GoogleSSOSettings
 
 
 settings = Settings()

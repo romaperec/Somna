@@ -21,6 +21,7 @@ dependencies = [
     "httpx>=0.28.1",
     "aiosqlite>=0.22.1",
     "pytest-asyncio>=1.4.0",
+    "fastapi-sso>=0.21.1",
 ]
 
 [tool.ruff]

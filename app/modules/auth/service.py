@@ -9,7 +9,7 @@ from app.modules.auth.exceptions import (
 )
 from app.modules.auth.repository import AuthRepository
 from app.modules.auth.schemas import TokenPair, UserLogin
-from app.modules.users.schemas import UserCreate
+from app.modules.users.schemas import UserBase, UserCreate
 from app.modules.users.service import UserService
 
 
@@ -34,6 +34,13 @@ class AuthService:
             raise AuthenticationFailedException
 
         return await self._generate_and_save_tokens(str(user.id))
+
+    async def register_or_login_user_by_oauth(self,  email: str, username: str = "Traveler"):
+        existing_user = await self.user_service.get_for_authentication(email)
+        if not existing_user:
+            user = await self.user_service.register_by_oauth(UserBase(username=username, email=email))
+            return await self._generate_and_save_tokens(str(user.id))
+        return await self._generate_and_save_tokens(str(existing_user.id))
 
     async def update_both_tokens(self, refresh_token: str | None):
         _, user_id = await self._extract_refresh_payload(refresh_token)

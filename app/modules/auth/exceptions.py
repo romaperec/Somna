@@ -17,7 +17,7 @@ class MissingTokenException(AuthBaseException):
     status_code = 401
 
 class AuthenticationFailedException(AuthBaseException):
-    message = "Incorrect email/username or password."
+    message = "Incorrect email or password."
     status_code = 401
 
 class SessionExpiredException(AuthBaseException):

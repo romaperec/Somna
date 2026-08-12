@@ -26,7 +26,7 @@ class AuthService:
         return await self._generate_and_save_tokens(str(user.id))
 
     async def login_user(self, schema: UserLogin) -> TokenPair:
-        user = await self.user_service.get_for_authentication(schema.username_or_email)
+        user = await self.user_service.get_for_authentication(schema.email)
         if not user:
             raise AuthenticationFailedException
 

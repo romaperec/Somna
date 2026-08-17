@@ -6,7 +6,7 @@ from app.core.lifespan import lifespan
 from app.modules.auth.router import router as auth_router
 from app.modules.users.router import router as user_router
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, version="1.0.0")
 app.include_router(auth_router)
 app.include_router(user_router)
 

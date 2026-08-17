@@ -20,7 +20,7 @@ jobs:
         run: uv sync
 
       - name: Prepare test environment
-        run: cp .env.test .env
+        run: cp .env.template .env
 
       - name: Run tests
         run: uv run pytest tests/ -v

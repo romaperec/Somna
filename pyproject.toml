@@ -1,0 +1,79 @@
+[project]
+name = "somna"
+version = "1.0.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.18.4",
+    "asyncpg>=0.31.0",
+    "fastapi>=0.136.3",
+    "granian[reload]>=2.7.4",
+    "loguru>=0.7.3",
+    "pydantic[email]>=2.13.4",
+    "pydantic-settings>=2.14.1",
+    "ruff>=0.15.14",
+    "sqlalchemy>=2.0.50",
+    "argon2-cffi>=25.1.0",
+    "pyjwt>=2.13.0",
+    "redis>=8.0.0",
+    "pytest>=9.1.1",
+    "httpx>=0.28.1",
+    "aiosqlite>=0.22.1",
+    "pytest-asyncio>=1.4.0",
+    "fastapi-sso>=0.21.1",
+    "fakeredis>=2.37.0",
+]
+
+[tool.ruff]
+line-length = 88
+
+target-version = "py310"
+
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "venv",
+    "dist",
+    "build",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "B",
+    "UP",
+    "C4",
+    "RUF",
+]
+
+ignore = [
+    "E501",
+]
+
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.format]
+quote-style = "double"
+
+indent-style = "space"
+
+skip-magic-trailing-comma = false
+
+docstring-code-format = true
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.params.Depends"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

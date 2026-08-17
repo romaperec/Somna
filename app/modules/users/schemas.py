@@ -21,8 +21,8 @@ class UserUpdate(BaseModel):
 
 
 class UserChangePassword(BaseModel):
-    current_password: Annotated[str, Field(max_length=64)]
-    new_password: Annotated[str, Field(max_length=64)]
+    current_password: Annotated[str, Field(min_length=6, max_length=64)]
+    new_password: Annotated[str, Field(min_length=6, max_length=64)]
 
 class UserResponse(UserBase):
     id: UUID

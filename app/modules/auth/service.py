@@ -43,7 +43,12 @@ class AuthService:
         return await self._generate_and_save_tokens(str(existing_user.id))
 
     async def update_both_tokens(self, refresh_token: str | None):
-        _, user_id = await self._extract_refresh_payload(refresh_token)
+        jti, user_id = await self._extract_refresh_payload(refresh_token)
+        token_in_redis = await self.repo.get_refresh_token(jti)
+        if not token_in_redis or token_in_redis != user_id:
+            raise InvalidTokenException
+
+        await self.repo.delete_refresh_token(jti)
         return await self._generate_and_save_tokens(user_id)
 
     async def logout_user(self, refresh_token: str | None):

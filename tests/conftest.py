@@ -27,7 +27,7 @@ async def override_get_auth_redis():
     return fake_auth_redis
 
 async def override_get_cache_redis():
-    return fake_auth_redis
+    return fake_cache_redis
 
 app.dependency_overrides[db_helper.session_getter] = override_get_db
 app.dependency_overrides[get_auth_redis_client] = override_get_auth_redis

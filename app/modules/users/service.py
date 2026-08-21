@@ -6,7 +6,6 @@ from app.modules.users.exceptions import (
     UserInvalidPasswordException,
     UserNotFoundException,
     UserPasswordsMatchException,
-    UserUsernameExistsException,
 )
 from app.modules.users.models import User
 from app.modules.users.repository import UserRepository

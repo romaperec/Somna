@@ -9,7 +9,7 @@ from app.modules.auth.service import AuthService
 from app.modules.users.dependencies import get_user_service
 from app.modules.users.service import UserService
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 def get_auth_redis_client(request: Request) -> Redis:
     return request.app.state.auth_redis

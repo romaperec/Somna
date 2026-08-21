@@ -23,7 +23,7 @@ async def register(user: UserCreate, response: Response, service: AuthService = 
         key="refresh_token",
         value=tokens.refresh_token,
         httponly=True,
-        secure=False,
+        secure=True,
         samesite="lax",
         max_age=settings.jwt.refresh_token_expire_days * 24 * 60 * 60,
     )
@@ -38,7 +38,7 @@ async def login(user: UserLogin, response: Response, service: AuthService = Depe
         key="refresh_token",
         value=tokens.refresh_token,
         httponly=True,
-        secure=False,
+        secure=True,
         samesite="lax",
         max_age=settings.jwt.refresh_token_expire_days * 24 * 60 * 60,
     )
@@ -54,7 +54,7 @@ async def update_tokens(request: Request, response: Response, service: AuthServi
         key="refresh_token",
         value=tokens.refresh_token,
         httponly=True,
-        secure=False,
+        secure=True,
         samesite="lax",
         max_age=settings.jwt.refresh_token_expire_days * 24 * 60 * 60,
     )
@@ -71,7 +71,7 @@ async def logout(request: Request, response: Response, service: AuthService = De
         path="/",
         httponly=True,
         samesite="lax",
-        secure=False,
+        secure=True,
     )
 
 
@@ -91,7 +91,7 @@ async def login_by_google_callback(request: Request, response: Response, service
         key="refresh_token",
         value=tokens.refresh_token,
         httponly=True,
-        secure=False,
+        secure=True,
         samesite="lax",
         max_age=settings.jwt.refresh_token_expire_days * 24 * 60 * 60,
     )

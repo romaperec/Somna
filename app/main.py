@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.config import settings
 from app.core.exceptions import AppBaseException
 from app.core.lifespan import lifespan
 from app.modules.auth.router import router as auth_router

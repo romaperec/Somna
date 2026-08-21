@@ -42,8 +42,11 @@ class UserService:
     async def get_for_authentication(self, email: str) -> User | None:
         return await self.repo.get_by_email(email)
 
-    async def get_profile(self, user_id: uuid.UUID) -> UserPrivateResponse | None:
-        return await self.repo.get_by_id(user_id)
+    async def get_profile(self, user_id: uuid.UUID) -> UserPrivateResponse:
+        user_data = await self.repo.get_by_id(user_id)
+        if not user_data:
+            raise UserNotFoundException
+        return user_data
 
     async def update_profile(self, user_id: uuid.UUID, user_data: UserUpdate) -> User:
         user = await self.repo.get_orm_by_id(user_id)

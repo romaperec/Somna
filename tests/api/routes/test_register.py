@@ -1,3 +1,5 @@
+import pytest
+
 async def test_register_success(client, user_payload):
     response = await client.post("/auth/register", json=user_payload)
     data = response.json()
@@ -15,8 +17,19 @@ async def test_register_duplicate_email(client, user_payload):
     response2 = await client.post("/auth/register", json=user_payload)
     assert response2.status_code == 409
 
-async def test_register_short_password(client, user_payload):
-    user_payload["password"] = "test"
+@pytest.mark.parametrize(
+    "invalid_password",
+    [
+        "test",
+        "1111111",
+        "NoDigits!",
+        "only_lower1!",
+        "ONLY_UPPER1!",
+        "NoSpecial123",
+    ],
+)
+async def test_register_invalid_password(client, user_payload, invalid_password):
+    user_payload["password"] = invalid_password
 
     response = await client.post("/auth/register", json=user_payload)
     assert response.status_code == 422

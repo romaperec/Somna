@@ -38,7 +38,7 @@ def user_payload():
     return {
         "username": "test_user",
         "email": "test@email.com",
-        "password": "test_password",
+        "password": "TestPassword123!",
     }
 
 @pytest_asyncio.fixture

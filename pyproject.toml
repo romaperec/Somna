@@ -26,6 +26,7 @@ dependencies = [
     "taskiq>=0.12.6",
     "taskiq-nats>=0.6.0",
     "taskiq-fastapi>=0.5.0",
+    "aiosmtplib>=5.1.2",
 ]
 
 [tool.ruff]

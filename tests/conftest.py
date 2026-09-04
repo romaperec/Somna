@@ -10,7 +10,6 @@ from app.core.base import Base
 from app.main import app
 from app.modules.auth.dependencies import get_auth_redis_client
 from app.modules.users.dependencies import get_cache_redis_client
-from app.modules.users.models import User
 
 engine = create_async_engine("sqlite+aiosqlite:///file::memory:?cache=shared&uri=true", echo=False, poolclass=StaticPool, connect_args={"check_same_thread": False})
 TestingSessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)

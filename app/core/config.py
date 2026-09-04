@@ -60,6 +60,14 @@ class GoogleSSOSettings(BaseModel):
     redirect_uri: str = "http://localhost:8000/auth/google/callback"
 
 
+class SMTPSettings(BaseModel):
+    host: str = "smtp.gmail.com"
+    port: int = 465
+    user: str
+    password: str
+    ssl_required: bool = True
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),

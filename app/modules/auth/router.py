@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Request, Response
 from app.core.config import settings
 from app.core.sso import google_sso
 from app.modules.auth.dependencies import get_auth_service
-from app.modules.auth.schemas import TokenPair, UserLogin
+from app.modules.auth.schemas import TokenPair, UserLogin, RecoveryPassword, ResetPassword
 from app.modules.auth.service import AuthService
 from app.modules.users.schemas import UserCreate
 
@@ -97,3 +97,12 @@ async def login_by_google_callback(request: Request, response: Response, service
     )
 
     return tokens
+
+
+@router.post("/recovery-password")
+async def recovery_password_by_email(data: RecoveryPassword, service: AuthService = Depends(get_auth_service)):
+    return await service.recovery_password(data)
+
+@router.post("/reset-password")
+async def reset_password(data: ResetPassword, service: AuthService = Depends(get_auth_service)):
+    return await service.reset_password(data)

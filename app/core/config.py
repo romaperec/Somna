@@ -87,6 +87,7 @@ class Settings(BaseSettings):
     redis: RedisSettings = RedisSettings()
     nats: NatsSettings = NatsSettings()
     google_sso: GoogleSSOSettings
+    smtp: SMTPSettings
 
 
 settings = Settings()

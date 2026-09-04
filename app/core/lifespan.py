@@ -6,6 +6,7 @@ from redis.asyncio import BlockingConnectionPool, Redis
 
 from app.core.config import settings
 from app.core.logging import setup_logging
+from app.core.tasks import broker
 
 
 @asynccontextmanager
@@ -40,6 +41,10 @@ async def lifespan(app: FastAPI):
         await auth_redis.ping()
         logger.info(f"Redis auth connected. DB {settings.redis.db_auth}")
 
+        logger.info("Connecting to NATS JetStream broker")
+        await broker.startup()
+        logger.info("NATS JetStream broker started successfully")
+
     except Exception as e:
         logger.critical(f"Failed to connect to Redis: {e}")
         await cache_pool.disconnect()
@@ -52,6 +57,11 @@ async def lifespan(app: FastAPI):
     yield
 
     logger.info("Shutting down application")
+
+    logger.info("Closing NATS JetStream broker connection")
+    await broker.shutdown()
+    logger.info("NATS JetStream broker connection closed successfully")
+
     logger.info("Closing redis client and connection pool")
 
     await cache_redis.aclose()
@@ -61,3 +71,4 @@ async def lifespan(app: FastAPI):
     await auth_pool.disconnect()
 
     logger.info("Redis connections closed successfully")
+    logger.info("All connections closed successfully")

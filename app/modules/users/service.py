@@ -34,6 +34,15 @@ class UserService:
 
         return await self.repo.create(user_data)
 
+    async def save_new_password(self, user_id: uuid.UUID, hashed_password: str) -> bool:
+        user = await self.repo.get_orm_by_id(user_id)
+
+        if not user:
+            raise UserNotFoundException
+
+        await self.repo.update(user, {"hashed_password": hashed_password})
+        return True
+
     async def register_by_oauth(self, schema: UserBase) -> User:
         user_data = schema.model_dump()
         return await self.repo.create(user_data)

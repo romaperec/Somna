@@ -9,7 +9,7 @@ from app.modules.users.schemas import UserPrivateResponse
 
 
 class UserRepository:
-    def __init__(self, redis: Redis,  session: AsyncSession):
+    def __init__(self, redis: Redis, session: AsyncSession):
         self.redis = redis
         self.session = session
 

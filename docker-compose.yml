@@ -20,6 +20,19 @@ services:
     volumes:
       - redisdata:/data
 
+  nats:
+    image: nats:latest
+    container_name: nats_broker
+    command: ["-js", "-sd", "/data"]
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - natsdata:/data
+    restart: always
+
+
 volumes:
   pgdata:
   redisdata:
+  natsdata:

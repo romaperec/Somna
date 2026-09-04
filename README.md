@@ -34,7 +34,13 @@ uv sync
 alembic upgrade head
 ```
 
-**5. Start the server**
+**5. Start the TaskIQ worker**
+
+```bash
+taskiq worker app.core.tasks:broker app.modules.auth.tasks
+```
+
+**6. Start the server**
 
 ```bash
 granian --interface asgi app.main:app
@@ -47,9 +53,3 @@ API documentation is available at:
 **http://localhost:8000/docs**
 
 ---
-
-<div align="center">
-
-*Made with ☕ for better sleep*
-
-</div>

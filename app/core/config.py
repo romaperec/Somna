@@ -54,6 +54,11 @@ class RedisSettings(BaseModel):
     db_auth: int = 1
 
 
+class NatsSettings(BaseModel):
+    host: str = "localhost"
+    port: int = 4222
+
+
 class GoogleSSOSettings(BaseModel):
     client_id: str
     client_secret: str

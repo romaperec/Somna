@@ -85,6 +85,7 @@ class Settings(BaseSettings):
     database: DatabaseSettings
     jwt: JWTSettings
     redis: RedisSettings = RedisSettings()
+    nats: NatsSettings = NatsSettings()
     google_sso: GoogleSSOSettings
 
 

@@ -6,7 +6,7 @@ from redis.asyncio import BlockingConnectionPool, Redis
 
 from app.core.config import settings
 from app.core.logging import setup_logging
-from app.core.tasks import broker
+from app.core.broker import broker
 
 
 @asynccontextmanager

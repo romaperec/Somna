@@ -3,7 +3,12 @@ from fastapi import APIRouter, Depends, Request, Response
 from app.core.config import settings
 from app.core.sso import google_sso
 from app.modules.auth.dependencies import get_auth_service
-from app.modules.auth.schemas import TokenPair, UserLogin, RecoveryPassword, ResetPassword
+from app.modules.auth.schemas import (
+    TokenPair,
+    UserLogin,
+    RecoveryPassword,
+    ResetPassword,
+)
 from app.modules.auth.service import AuthService
 from app.modules.users.schemas import UserCreate
 
@@ -16,7 +21,11 @@ def status():
 
 
 @router.post("/register", response_model=TokenPair, status_code=201)
-async def register(user: UserCreate, response: Response, service: AuthService = Depends(get_auth_service)):
+async def register(
+    user: UserCreate,
+    response: Response,
+    service: AuthService = Depends(get_auth_service),
+):
     tokens: TokenPair = await service.register_user(user)
 
     response.set_cookie(
@@ -30,8 +39,13 @@ async def register(user: UserCreate, response: Response, service: AuthService = 
 
     return tokens
 
+
 @router.post("/login", response_model=TokenPair)
-async def login(user: UserLogin, response: Response, service: AuthService = Depends(get_auth_service)):
+async def login(
+    user: UserLogin,
+    response: Response,
+    service: AuthService = Depends(get_auth_service),
+):
     tokens: TokenPair = await service.login_user(user)
 
     response.set_cookie(
@@ -45,8 +59,13 @@ async def login(user: UserLogin, response: Response, service: AuthService = Depe
 
     return tokens
 
+
 @router.post("/refresh", response_model=TokenPair)
-async def update_tokens(request: Request, response: Response, service: AuthService = Depends(get_auth_service)):
+async def update_tokens(
+    request: Request,
+    response: Response,
+    service: AuthService = Depends(get_auth_service),
+):
     refresh_token = request.cookies.get("refresh_token")
     tokens: TokenPair = await service.update_both_tokens(refresh_token)
 
@@ -61,8 +80,13 @@ async def update_tokens(request: Request, response: Response, service: AuthServi
 
     return tokens
 
+
 @router.post("/logout")
-async def logout(request: Request, response: Response, service: AuthService = Depends(get_auth_service)):
+async def logout(
+    request: Request,
+    response: Response,
+    service: AuthService = Depends(get_auth_service),
+):
     refresh_token = request.cookies.get("refresh_token")
     await service.logout_user(refresh_token)
 
@@ -82,10 +106,16 @@ async def login_by_google():
 
 
 @router.get("/google/callback")
-async def login_by_google_callback(request: Request, response: Response, service: AuthService = Depends(get_auth_service)):
+async def login_by_google_callback(
+    request: Request,
+    response: Response,
+    service: AuthService = Depends(get_auth_service),
+):
     async with google_sso as sso:
         user_data = await sso.verify_and_process(request)
-    tokens: TokenPair = await service.register_or_login_user_by_oauth(user_data.email, user_data.first_name)
+    tokens: TokenPair = await service.register_or_login_user_by_oauth(
+        user_data.email, user_data.first_name
+    )
 
     response.set_cookie(
         key="refresh_token",
@@ -100,9 +130,14 @@ async def login_by_google_callback(request: Request, response: Response, service
 
 
 @router.post("/recovery-password")
-async def recovery_password_by_email(data: RecoveryPassword, service: AuthService = Depends(get_auth_service)):
+async def recovery_password_by_email(
+    data: RecoveryPassword, service: AuthService = Depends(get_auth_service)
+):
     return await service.recovery_password(data)
 
+
 @router.post("/reset-password")
-async def reset_password(data: ResetPassword, service: AuthService = Depends(get_auth_service)):
+async def reset_password(
+    data: ResetPassword, service: AuthService = Depends(get_auth_service)
+):
     return await service.reset_password(data)

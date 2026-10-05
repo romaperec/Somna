@@ -14,14 +14,33 @@ from app.modules.users.service import UserService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
+
 def get_auth_redis_client(request: Request) -> Redis:
     return request.app.state.auth_redis
 
-def get_auth_repository(redis: Redis = Depends(get_auth_redis_client), session: AsyncSession = Depends(db_helper.session_getter)) -> AuthRepository:
+
+def get_auth_repository(
+    redis: Redis = Depends(get_auth_redis_client),
+    session: AsyncSession = Depends(db_helper.session_getter),
+) -> AuthRepository:
     return AuthRepository(redis=redis, session=session)
 
-def get_auth_service(repo: AuthRepository = Depends(get_auth_repository), user_service: UserService = Depends(get_user_service)) -> AuthService:
-    return AuthService(repo=repo, jwt_service=jwt_helper, user_service=user_service, password_service=password_service, recovery_helper=recovery_helper)
 
-def get_current_user_id(token: str = Depends(oauth2_scheme), auth_service: AuthService = Depends(get_auth_service)):
+def get_auth_service(
+    repo: AuthRepository = Depends(get_auth_repository),
+    user_service: UserService = Depends(get_user_service),
+) -> AuthService:
+    return AuthService(
+        repo=repo,
+        jwt_service=jwt_helper,
+        user_service=user_service,
+        password_service=password_service,
+        recovery_helper=recovery_helper,
+    )
+
+
+def get_current_user_id(
+    token: str = Depends(oauth2_scheme),
+    auth_service: AuthService = Depends(get_auth_service),
+):
     return auth_service.get_user_id_by_token(token)

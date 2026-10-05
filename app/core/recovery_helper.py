@@ -14,4 +14,5 @@ class RecoveryTokenHelper:
     def hash_token(cls, raw_token: str) -> str:
         return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
 
+
 recovery_helper = RecoveryTokenHelper()

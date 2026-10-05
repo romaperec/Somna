@@ -12,8 +12,12 @@ class AuthRepository:
         self.redis = redis
         self.session = session
 
-    async def save_recovery_token(self, user_id: uuid.UUID, token_hash: str, expires_at: datetime) -> bool:
-        token = RecoveryToken(user_id=user_id, token_hash=token_hash, expires_at=expires_at)
+    async def save_recovery_token(
+        self, user_id: uuid.UUID, token_hash: str, expires_at: datetime
+    ) -> bool:
+        token = RecoveryToken(
+            user_id=user_id, token_hash=token_hash, expires_at=expires_at
+        )
 
         self.session.add(token)
         await self.session.commit()
@@ -22,7 +26,9 @@ class AuthRepository:
         return True
 
     async def save_recovery_token_status(self, token_hash: str, status: bool) -> bool:
-        token = await self.session.execute(select(RecoveryToken).where(RecoveryToken.token_hash == token_hash))
+        token = await self.session.execute(
+            select(RecoveryToken).where(RecoveryToken.token_hash == token_hash)
+        )
         token = token.scalar_one_or_none()
         token.is_used = status
 
@@ -30,9 +36,10 @@ class AuthRepository:
         await self.session.refresh(token)
         return True
 
-
     async def get_recovery_token_by_hash(self, token_hash: str) -> RecoveryToken | None:
-        token = await self.session.execute(select(RecoveryToken).where(RecoveryToken.token_hash == token_hash))
+        token = await self.session.execute(
+            select(RecoveryToken).where(RecoveryToken.token_hash == token_hash)
+        )
         token = token.scalar_one_or_none()
         return token
 

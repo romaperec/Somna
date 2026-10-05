@@ -22,6 +22,9 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(user_router)
 
+
 @app.exception_handler(AppBaseException)
 async def app_base_exception_handler(request: Request, exc: AppBaseException):
-    return JSONResponse(status_code=exc.status_code, content={"status": "error", "message": exc.message})
+    return JSONResponse(
+        status_code=exc.status_code, content={"status": "error", "message": exc.message}
+    )

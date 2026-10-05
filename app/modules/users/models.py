@@ -9,6 +9,7 @@ from app.core.base import Base
 if TYPE_CHECKING:
     from app.modules.auth.models import RecoveryToken
 
+
 class User(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     username: Mapped[str] = mapped_column(String(32))
@@ -17,6 +18,5 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(nullable=True)
 
     recovery_tokens: Mapped[list["RecoveryToken"]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan"
+        back_populates="user", cascade="all, delete-orphan"
     )

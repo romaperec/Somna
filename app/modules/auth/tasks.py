@@ -11,6 +11,7 @@ from app.core.broker import broker
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
+
 @broker.task
 async def task_send_recovery_email(email: str, token: str) -> None:
     message = EmailMessage()
@@ -18,11 +19,20 @@ async def task_send_recovery_email(email: str, token: str) -> None:
     message["To"] = email
     message["Subject"] = "Recovery password"
 
-    reset_link = f"https://{settings.app.name}.{settings.app.domain}/reset?token={token}"
+    reset_link = (
+        f"https://{settings.app.name}.{settings.app.domain}/reset?token={token}"
+    )
 
     template_response = templates.get_template("auth/recovery_email.html")
     current_year = datetime.now().year
-    html_content = template_response.render({"reset_link": reset_link, "app": settings.app.name, "subject": message["Subject"], "year": current_year})
+    html_content = template_response.render(
+        {
+            "reset_link": reset_link,
+            "app": settings.app.name,
+            "subject": message["Subject"],
+            "year": current_year,
+        }
+    )
 
     message.add_alternative(html_content, "html")
 

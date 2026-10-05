@@ -10,14 +10,26 @@ from app.modules.auth.exceptions import (
     MissingTokenException,
 )
 from app.modules.auth.repository import AuthRepository
-from app.modules.auth.schemas import TokenPair, UserLogin, RecoveryPassword, ResetPassword
+from app.modules.auth.schemas import (
+    TokenPair,
+    UserLogin,
+    RecoveryPassword,
+    ResetPassword,
+)
 from app.modules.auth.tasks import task_send_recovery_email
 from app.modules.users.schemas import UserBase, UserCreate
 from app.modules.users.service import UserService
 
 
 class AuthService:
-    def __init__(self, repo: AuthRepository, jwt_service: JWTHelper, user_service: UserService, password_service: PasswordSecurityService, recovery_helper: RecoveryTokenHelper):
+    def __init__(
+        self,
+        repo: AuthRepository,
+        jwt_service: JWTHelper,
+        user_service: UserService,
+        password_service: PasswordSecurityService,
+        recovery_helper: RecoveryTokenHelper,
+    ):
         self.repo = repo
         self.jwt_service = jwt_service
         self.user_service = user_service
@@ -30,7 +42,9 @@ class AuthService:
             raise AuthenticationFailedException
 
         tokens = self.recovery_helper.generate_pair()
-        expires_at = (datetime.now(timezone.utc) + timedelta(minutes=15)).replace(tzinfo=None)
+        expires_at = (datetime.now(timezone.utc) + timedelta(minutes=15)).replace(
+            tzinfo=None
+        )
 
         await self.repo.save_recovery_token(user.id, tokens[1], expires_at)
 
@@ -43,7 +57,9 @@ class AuthService:
         if token is None:
             raise InvalidTokenException
 
-        if token.is_used == True or token.expires_at < datetime.now(timezone.utc).replace(tzinfo=None):
+        if token.is_used == True or token.expires_at < datetime.now(
+            timezone.utc
+        ).replace(tzinfo=None):
             raise InvalidTokenException
 
         hashed_password = self.password_service.hash(data.password)
@@ -52,7 +68,6 @@ class AuthService:
         await self.user_service.save_new_password(token.user_id, hashed_password)
 
         return {"detail": "Password reset successfully"}
-
 
     async def register_user(self, schema: UserCreate) -> TokenPair:
         user = await self.user_service.register(schema)
@@ -69,10 +84,14 @@ class AuthService:
 
         return await self._generate_and_save_tokens(str(user.id))
 
-    async def register_or_login_user_by_oauth(self,  email: str, username: str = "Traveler"):
+    async def register_or_login_user_by_oauth(
+        self, email: str, username: str = "Traveler"
+    ):
         existing_user = await self.user_service.get_for_authentication(email)
         if not existing_user:
-            user = await self.user_service.register_by_oauth(UserBase(username=username, email=email))
+            user = await self.user_service.register_by_oauth(
+                UserBase(username=username, email=email)
+            )
             return await self._generate_and_save_tokens(str(user.id))
         return await self._generate_and_save_tokens(str(existing_user.id))
 
@@ -100,7 +119,9 @@ class AuthService:
 
         return UUID(user_id)
 
-    async def _extract_refresh_payload(self, refresh_token: str | None) -> tuple[str, str]:
+    async def _extract_refresh_payload(
+        self, refresh_token: str | None
+    ) -> tuple[str, str]:
         if refresh_token is None:
             raise MissingTokenException
 
@@ -118,7 +139,11 @@ class AuthService:
 
     async def _generate_and_save_tokens(self, user_id: str) -> TokenPair:
         access_token = self.jwt_service.create_access_token({"sub": user_id})
-        refresh_token, token_jti = self.jwt_service.create_refresh_token({"sub": user_id})
+        refresh_token, token_jti = self.jwt_service.create_refresh_token(
+            {"sub": user_id}
+        )
 
-        await self.repo.save_refresh_token(token_jti, user_id, ttl=self.jwt_service.refresh_expire_seconds)
+        await self.repo.save_refresh_token(
+            token_jti, user_id, ttl=self.jwt_service.refresh_expire_seconds
+        )
         return TokenPair(access_token=access_token, refresh_token=refresh_token)

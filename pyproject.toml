@@ -29,6 +29,7 @@ dependencies = [
     "aiosmtplib>=5.1.2",
     "jinja2>=3.1.6",
     "supabase>=2.31.0",
+    "python-multipart>=0.0.32",
 ]
 
 [tool.ruff]
@@ -61,7 +62,8 @@ select = [
 
 ignore = [
     "E501",
-    "l001",
+    "I001",
+    "W292",
 ]
 
 fixable = ["ALL"]

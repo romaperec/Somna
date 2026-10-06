@@ -9,6 +9,7 @@ from app.core.db_helper import db_helper
 from app.core.base import Base
 from app.modules.users.models import User
 from app.modules.auth.models import RecoveryToken
+from app.modules.storage.models import Audio
 from app.main import app
 from app.modules.auth.dependencies import get_auth_redis_client
 from app.modules.users.dependencies import get_cache_redis_client

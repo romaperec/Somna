@@ -73,6 +73,11 @@ class SMTPSettings(BaseModel):
     ssl_required: bool = True
 
 
+class SupabaseSettings(BaseModel):
+    url: str
+    key: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
@@ -88,6 +93,7 @@ class Settings(BaseSettings):
     nats: NatsSettings = NatsSettings()
     google_sso: GoogleSSOSettings
     smtp: SMTPSettings
+    supabase: SupabaseSettings
 
 
 settings = Settings()

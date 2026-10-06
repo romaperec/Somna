@@ -10,6 +10,7 @@ from app.core.base import Base
 from app.core.config import settings
 from app.modules.users.models import User
 from app.modules.auth.models import RecoveryToken
+from app.modules.storage.models import Audio
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

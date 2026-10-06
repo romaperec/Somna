@@ -7,6 +7,7 @@ from app.core.exceptions import AppBaseException
 from app.core.lifespan import lifespan
 from app.modules.auth.router import router as auth_router
 from app.modules.users.router import router as user_router
+from app.modules.storage.router import router as storage_router
 
 app = FastAPI(lifespan=lifespan, version="1.0.0")
 
@@ -19,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(storage_router)
 app.include_router(auth_router)
 app.include_router(user_router)
 

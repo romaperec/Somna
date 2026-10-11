@@ -37,7 +37,7 @@ alembic upgrade head
 **5. Start the TaskIQ worker**
 
 ```bash
-taskiq worker app.core.tasks:broker app.modules.auth.tasks
+taskiq worker app.core.broker:broker app.modules.auth.tasks
 ```
 
 **6. Start the server**

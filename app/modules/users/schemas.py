@@ -60,6 +60,6 @@ class UserResponse(UserBase):
 
 
 class UserPrivateResponse(UserResponse):
-    hashed_password: str
+    hashed_password: str | None
 
     model_config = ConfigDict(from_attributes=True)

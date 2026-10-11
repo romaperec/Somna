@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request, Response
+from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.sso import google_sso
@@ -108,7 +109,6 @@ async def login_by_google():
 @router.get("/google/callback")
 async def login_by_google_callback(
     request: Request,
-    response: Response,
     service: AuthService = Depends(get_auth_service),
 ):
     async with google_sso as sso:
@@ -117,7 +117,11 @@ async def login_by_google_callback(
         user_data.email, user_data.first_name
     )
 
-    response.set_cookie(
+    redirect_response = RedirectResponse(
+        url=f"{settings.app.frontend_host}/oauth/callback#access_token={tokens.access_token}",
+        status_code=302,
+    )
+    redirect_response.set_cookie(
         key="refresh_token",
         value=tokens.refresh_token,
         httponly=True,
@@ -125,8 +129,7 @@ async def login_by_google_callback(
         samesite="lax",
         max_age=settings.jwt.refresh_token_expire_days * 24 * 60 * 60,
     )
-
-    return tokens
+    return redirect_response
 
 
 @router.post("/recovery-password")

@@ -9,7 +9,7 @@ from app.modules.auth.router import router as auth_router
 from app.modules.users.router import router as user_router
 from app.modules.storage.router import router as storage_router
 
-app = FastAPI(lifespan=lifespan, version="1.0.0")
+app = FastAPI(lifespan=lifespan, version=settings.app.version)
 
 # noinspection bad-argument-type
 app.add_middleware(

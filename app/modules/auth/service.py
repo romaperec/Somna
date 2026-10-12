@@ -57,7 +57,7 @@ class AuthService:
         if token is None:
             raise InvalidTokenException
 
-        if token.is_used == True or token.expires_at < datetime.now(
+        if token.is_used or token.expires_at < datetime.now(
             timezone.utc
         ).replace(tzinfo=None):
             raise InvalidTokenException

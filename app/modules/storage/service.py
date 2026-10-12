@@ -37,6 +37,7 @@ class StorageService:
         if audio.user_id != user_id:
             raise PermissionDenied
 
+        await self.repo.delete_files("files", [f"audio/{audio.unique_filename}"])
         return await self.repo.delete_audio(audio)
 
     async def upload_audio(

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, ByteSize, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -78,6 +78,11 @@ class SupabaseSettings(BaseModel):
     key: str
 
 
+class StorageSettings(BaseModel):
+    bucket: str = "files"
+    max_file_size: ByteSize = ByteSize(20 * 1024 * 1024)
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
@@ -94,6 +99,7 @@ class Settings(BaseSettings):
     google_sso: GoogleSSOSettings
     smtp: SMTPSettings
     supabase: SupabaseSettings
+    storage: StorageSettings = StorageSettings()
 
 
 settings = Settings()

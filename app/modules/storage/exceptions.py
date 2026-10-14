@@ -9,11 +9,16 @@ class InvalidFileTypeException(StorageBaseException):
     status_code = 415
 
 
-class FileNotFound(StorageBaseException):
+class FileNotFoundException(StorageBaseException):
     message = "File not found."
     status_code = 404
 
 
-class PermissionDenied(StorageBaseException):
+class PermissionDeniedException(StorageBaseException):
     message = "You are not the owner of this file."
     status_code = 403
+
+
+class FileTooLargeException(StorageBaseException):
+    message = "File exceeds maximum allowed size."
+    status_code = 413

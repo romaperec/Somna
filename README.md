@@ -83,21 +83,6 @@ Interactive API documentation (Swagger UI) is available at:
 
 ---
 
-## 🧪 Tests & Linting
-
-```bash
-# Run tests
-pytest
-
-# Lint the code
-ruff check .
-
-# Format the code
-ruff format .
-```
-
----
-
 📄 Distributed under the **MIT License**
 
 </div>

@@ -23,6 +23,14 @@ async def get_user_profile(
     return await user_service.get_profile(current_user_id)
 
 
+@router.get("/{user_id}", response_model=UserResponse)
+async def get_user_profile_by_id(
+    user_id: UUID,
+    user_service: UserService = Depends(get_user_service),
+):
+    return await user_service.get_profile(user_id)
+
+
 @router.patch("/me", response_model=UserResponse)
 async def update_user_profile(
     user_data: UserUpdate,

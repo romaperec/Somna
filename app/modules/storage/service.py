@@ -59,8 +59,9 @@ class StorageService:
         audio_data["path"] = f"audio/{unique_name}"
         audio_data["user_id"] = user_id
 
+        content = await file.read()
         await self.repo.upload_audio(audio_data)
-        return await self.repo.upload_file(self.bucket, f"audio/{unique_name}", file.file)
+        return await self.repo.upload_file(self.bucket, f"audio/{unique_name}", content)
 
     def _generate_unique_filename(self, original_filename: str) -> str:
         file_extension = Path(original_filename).suffix

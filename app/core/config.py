@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class AppSettings(BaseModel):
     name: str = "Somna"
-    version: str = "1.0.0"
+    version: str = "2.0.0"
     domain: str = "com"
     frontend_host: str = "http://localhost:5173"
 

@@ -1,9 +1,14 @@
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.base import Base
+
+if TYPE_CHECKING:
+    from app.modules.auth.models import RecoveryToken
+    from app.modules.storage.models import Audio
 
 
 class User(Base):
@@ -12,3 +17,11 @@ class User(Base):
     description: Mapped[str] = mapped_column(String(450), nullable=True)
     email: Mapped[str] = mapped_column(String(254), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(nullable=True)
+
+    recovery_tokens: Mapped[list["RecoveryToken"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+
+    audios: Mapped[list["Audio"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )

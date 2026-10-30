@@ -1,12 +1,14 @@
 from typing import Literal
 
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, ByteSize, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppSettings(BaseModel):
     name: str = "Somna"
-    version: str = "1.0.0"
+    version: str = "2.0.0"
+    domain: str = "com"
+    frontend_host: str = "http://localhost:5173"
 
 
 class LoggingSettings(BaseModel):
@@ -52,10 +54,33 @@ class RedisSettings(BaseModel):
     db_auth: int = 1
 
 
+class NatsSettings(BaseModel):
+    host: str = "localhost"
+    port: int = 4222
+
+
 class GoogleSSOSettings(BaseModel):
     client_id: str
     client_secret: str
     redirect_uri: str = "http://localhost:8000/auth/google/callback"
+
+
+class SMTPSettings(BaseModel):
+    host: str = "smtp.gmail.com"
+    port: int = 465
+    user: str
+    password: str
+    ssl_required: bool = True
+
+
+class SupabaseSettings(BaseModel):
+    url: str
+    key: str
+
+
+class StorageSettings(BaseModel):
+    bucket: str = "files"
+    max_file_size: ByteSize = ByteSize(20 * 1024 * 1024)
 
 
 class Settings(BaseSettings):
@@ -70,7 +95,11 @@ class Settings(BaseSettings):
     database: DatabaseSettings
     jwt: JWTSettings
     redis: RedisSettings = RedisSettings()
+    nats: NatsSettings = NatsSettings()
     google_sso: GoogleSSOSettings
+    smtp: SMTPSettings
+    supabase: SupabaseSettings
+    storage: StorageSettings = StorageSettings()
 
 
 settings = Settings()

@@ -16,11 +16,13 @@ async def test_login_success(client, user_payload):
     assert data["token_type"] == "Bearer"
     assert "refresh_token" in response.cookies
 
+
 async def test_login_wrong_password(client, user_payload):
     user_payload["password"] = "Wrong"
 
     response = await client.post("/auth/login", json=user_payload)
     assert response.status_code == 401
+
 
 async def test_login_user_not_found(client, user_payload):
     user_payload["email"] = "test@example.com"
@@ -28,11 +30,13 @@ async def test_login_user_not_found(client, user_payload):
     response = await client.post("/auth/login", json=user_payload)
     assert response.status_code == 401
 
+
 async def test_login_invalid_email(client, user_payload):
     user_payload["email"] = "test_email.com"
 
     response = await client.post("/auth/login", json=user_payload)
     assert response.status_code == 422
+
 
 async def test_login_missing_fields(client, user_payload):
     test_cases = [

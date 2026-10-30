@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f7;">
+
+    <!-- Main Container -->
+    <div style="max-width: 600px; margin: 40px auto; padding: 0; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); overflow: hidden;">
+
+        <!-- Header / Brand Area -->
+        <div style="background-color: #ffffff; padding: 30px 40px 10px 40px; text-align: center;">
+            <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px;">{{ app }}</h1>
+        </div>
+
+        <!-- Content Body -->
+        <div style="padding: 20px 40px 40px 40px;">
+            <h2 style="color: #1a1a1a; font-size: 20px; margin-top: 0; margin-bottom: 15px;">Reset your password</h2>
+
+            <p style="font-size: 16px; color: #555555; margin-bottom: 20px;">
+                Hello,
+            </p>
+
+            <p style="font-size: 16px; color: #555555; margin-bottom: 25px;">
+                We received a request to reset the password for your {{ app }} account. To create a new password, please click the button below. This link is valid for the next <strong>15 minutes</strong>.
+            </p>
+
+            <!-- CTA Button -->
+            <div style="text-align: center; margin: 35px 0;">
+                <a href="{{ reset_link }}" style="background-color: #000000; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; display: inline-block;">
+                    Reset Password
+                </a>
+            </div>
+
+            <!-- Fallback Link -->
+            <p style="font-size: 14px; color: #888888; text-align: center; margin-top: 30px;">
+                If the button above doesn't work, copy and paste the following link into your browser's address bar:
+            </p>
+            <p style="font-size: 13px; color: #0066cc; text-align: center; word-break: break-all; margin-bottom: 0;">
+                <a href="{{ reset_link }}" style="color: #0066cc; text-decoration: underline;">{{ reset_link }}</a>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #f9f9fa; padding: 20px 40px; border-top: 1px solid #eeeeee;">
+            <p style="font-size: 12px; color: #999999; text-align: center; margin: 0;">
+                If you didn't request a password reset, you can safely ignore this email. Your password will not be changed.
+            </p>
+            <p style="font-size: 12px; color: #bbbbbb; text-align: center; margin-top: 10px;">
+                &copy; {{ year }} {{ app }}. All rights reserved.
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

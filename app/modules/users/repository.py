@@ -9,7 +9,7 @@ from app.modules.users.schemas import UserPrivateResponse
 
 
 class UserRepository:
-    def __init__(self, redis: Redis,  session: AsyncSession):
+    def __init__(self, redis: Redis, session: AsyncSession):
         self.redis = redis
         self.session = session
 
@@ -18,7 +18,9 @@ class UserRepository:
         user = user.scalar_one_or_none()
         return user
 
-    async def get_by_id(self, user_id: uuid.UUID, ttl: int = 900) -> UserPrivateResponse | None:
+    async def get_by_id(
+        self, user_id: uuid.UUID, ttl: int = 900
+    ) -> UserPrivateResponse | None:
         cached_user = await self.redis.get(f"user:{user_id}")
         if cached_user:
             return UserPrivateResponse.model_validate_json(cached_user)

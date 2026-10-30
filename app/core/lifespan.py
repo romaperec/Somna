@@ -3,9 +3,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from loguru import logger
 from redis.asyncio import BlockingConnectionPool, Redis
+from supabase import AsyncClient, create_async_client
 
 from app.core.config import settings
 from app.core.logging import setup_logging
+from app.core.broker import broker
 
 
 @asynccontextmanager
@@ -33,12 +35,24 @@ async def lifespan(app: FastAPI):
     )
     auth_redis = Redis(connection_pool=auth_pool)
 
+    supabase_client: AsyncClient = await create_async_client(
+        supabase_url=settings.supabase.url,
+        supabase_key=settings.supabase.key,
+    )
+
     try:
         await cache_redis.ping()
         logger.info(f"Redis cache connected. DB {settings.redis.db_cache}")
 
         await auth_redis.ping()
         logger.info(f"Redis auth connected. DB {settings.redis.db_auth}")
+
+        logger.info("Connecting to NATS JetStream broker")
+        await broker.startup()
+        logger.info("NATS JetStream broker started successfully")
+
+        await supabase_client.storage.list_buckets()
+        logger.info("Supabase client connected and verified successfully")
 
     except Exception as e:
         logger.critical(f"Failed to connect to Redis: {e}")
@@ -48,10 +62,16 @@ async def lifespan(app: FastAPI):
 
     app.state.cache_redis = cache_redis
     app.state.auth_redis = auth_redis
+    app.state.supabase_client = supabase_client
 
     yield
 
     logger.info("Shutting down application")
+
+    logger.info("Closing NATS JetStream broker connection")
+    await broker.shutdown()
+    logger.info("NATS JetStream broker connection closed successfully")
+
     logger.info("Closing redis client and connection pool")
 
     await cache_redis.aclose()
@@ -61,3 +81,4 @@ async def lifespan(app: FastAPI):
     await auth_pool.disconnect()
 
     logger.info("Redis connections closed successfully")
+    logger.info("All connections closed successfully")

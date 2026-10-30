@@ -1,6 +1,6 @@
 [project]
 name = "somna"
-version = "1.0.0"
+version = "2.0.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -23,6 +23,13 @@ dependencies = [
     "pytest-asyncio>=1.4.0",
     "fastapi-sso>=0.21.1",
     "fakeredis>=2.37.0",
+    "taskiq>=0.12.6",
+    "taskiq-nats>=0.6.0",
+    "taskiq-fastapi>=0.5.0",
+    "aiosmtplib>=5.1.2",
+    "jinja2>=3.1.6",
+    "supabase>=2.31.0",
+    "python-multipart>=0.0.32",
 ]
 
 [tool.ruff]
@@ -55,6 +62,8 @@ select = [
 
 ignore = [
     "E501",
+    "I001",
+    "W292",
 ]
 
 fixable = ["ALL"]

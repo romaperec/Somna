@@ -11,6 +11,7 @@ from app.modules.users.service import UserService
 def get_cache_redis_client(request: Request) -> Redis:
     return request.app.state.cache_redis
 
+
 def get_user_repository(
     session: AsyncSession = Depends(db_helper.session_getter),
     redis: Redis = Depends(get_cache_redis_client),

@@ -10,11 +10,6 @@ class UserEmailAlreadyExistsException(UserBaseException):
     status_code = 409
 
 
-class UserUsernameExistsException(UserBaseException):
-    message = "User with this username already exists."
-    status_code = 409
-
-
 class UserNotFoundException(UserBaseException):
     message = "User not found."
     status_code = 404
